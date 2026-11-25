@@ -9,7 +9,7 @@ echo Код: %ERRORLEVEL%
 echo === 3. Дамп источника ===
 py src/interpreter.py --binary out/copy.bin --dump out/src.xml --start 100 --end 102
 echo Код: %ERRORLEVEL%
-echo === 4. Ошибка: popcnt ещё не реализован ===
+=== 4. Программа из спецификации исполняется ===
 py src/main.py --source programs/spec.csv --output out/spec.bin
 py src/interpreter.py --binary out/spec.bin --dump out/x.xml --start 0 --end 5
 echo Код: %ERRORLEVEL%
