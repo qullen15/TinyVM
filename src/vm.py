@@ -73,10 +73,27 @@ def do_store(memory, b, c):
     return write_cell(memory, pointer, value)
 
 
+def popcount(value):
+    """Считает число единиц в двоичной записи числа."""
+    return bin(value).count("1")
+
+
+def do_popcnt(memory, b, c):
+    """mem[mem[c]] = popcount(mem[b]) — число единиц."""
+    value, error = read_cell(memory, b)
+    if error is not None:
+        return error
+    pointer, error = read_cell(memory, c)
+    if error is not None:
+        return error
+    return write_cell(memory, pointer, popcount(value))
+
+
 HANDLERS = {
     OPCODES["const"]: do_const,
     OPCODES["load"]: do_load,
     OPCODES["store"]: do_store,
+    OPCODES["popcnt"]: do_popcnt,
 }
 
 
