@@ -8,6 +8,9 @@ B_BITS = 13
 CONST_BITS = 29
 B_LIMIT = 2 ** B_BITS
 CONST_LIMIT = 2 ** CONST_BITS
+COMMAND_SIZE = 6
+B_SHIFT = 3
+C_SHIFT = 16
 
 
 def parse_number(text):
@@ -66,3 +69,21 @@ def format_instruction(instruction):
     """Форматирует команду как в тестах спецификации УВМ."""
     return (f"A={instruction['a']}, "
             f"B={instruction['b']}, C={instruction['c']}")
+
+
+def encode_instruction(instruction):
+    """Кодирует команду в 6 байт (little-endian) по битовым полям."""
+    value = (instruction["a"]
+             | (instruction["b"] << B_SHIFT)
+             | (instruction["c"] << C_SHIFT))
+    return value.to_bytes(COMMAND_SIZE, "little")
+
+
+def assemble(program):
+    """Транслирует промежуточное представление в машинный код."""
+    return b"".join(encode_instruction(item) for item in program)
+
+
+def format_bytes(data):
+    """Форматирует байты как в тестах спецификации УВМ."""
+    return ", ".join(f"0x{byte:02X}" for byte in data)
