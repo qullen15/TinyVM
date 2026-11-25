@@ -1,0 +1,16 @@
+op,b,c
+const,100,1
+const,101,2
+const,102,4
+const,103,8
+const,104,16
+const,20,100
+const,21,101
+const,22,102
+const,23,103
+const,24,104
+popcnt,100,20
+popcnt,101,21
+popcnt,102,22
+popcnt,103,23
+popcnt,104,24
