@@ -12,6 +12,8 @@ from vm import (decode_instruction, new_memory, read_cell, write_cell,
                 execute, run_program, check_bounds, dump_xml, MEMORY_SIZE)
 from interpreter import main
 
+UNKNOWN_OPCODE = 1
+
 INSTRUCTIONS = [
     {"a": 4, "b": 312, "c": 685},
     {"a": 0, "b": 778, "c": 797},
@@ -97,11 +99,10 @@ class TestExecute:
         assert error is None
         assert memory[200] == 88
 
-    def test_popcnt_not_ready(self):
+    def test_unknown_handler(self):
         memory = new_memory()
-        error = execute({"a": OPCODES["popcnt"], "b": 0, "c": 0}, memory)
-        assert error is not None
-
+        instruction = {"a": UNKNOWN_OPCODE, "b": 0, "c": 0}
+        assert execute(instruction, memory) is not None
 
 class TestRunProgram:
     """Цикл интерпретации целиком."""
