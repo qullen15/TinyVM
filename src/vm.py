@@ -1,6 +1,6 @@
 """Интерпретатор учебной ВМ: декодирование, память, исполнение."""
 
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as etree
 
 from assembler import (COMMAND_SIZE, B_SHIFT, C_SHIFT, OPCODES,
                        B_LIMIT, CONST_LIMIT)
@@ -127,9 +127,9 @@ def check_bounds(start, end, size):
 
 def dump_xml(memory, start, end):
     """Формирует XML-дамп памяти в диапазоне адресов."""
-    root = ET.Element("memory", start=str(start), end=str(end))
+    root = etree.Element("memory", start=str(start), end=str(end))
     for address in range(start, end + 1):
-        cell = ET.SubElement(root, "cell", address=str(address))
+        cell = etree.SubElement(root, "cell", address=str(address))
         cell.text = str(memory[address])
-    ET.indent(root)
-    return ET.tostring(root, encoding="unicode")
+    etree.indent(root)
+    return etree.tostring(root, encoding="unicode")

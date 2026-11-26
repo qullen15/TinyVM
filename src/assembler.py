@@ -49,7 +49,7 @@ def make_instruction(op, b_text, c_text):
 
 
 def parse_program(text):
-    """Транслирует CSV-текст в список команд; (список, None) или (None, ошибка)."""
+    """Транслирует CSV-текст в команды; (список, None) или (None, ошибка)."""
     reader = csv.DictReader(text.splitlines())
     if reader.fieldnames != FIELDS:
         return None, f"ожидался заголовок {','.join(FIELDS)}"

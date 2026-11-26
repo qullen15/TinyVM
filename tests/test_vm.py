@@ -13,6 +13,12 @@ from vm import (decode_instruction, new_memory, read_cell, write_cell,
 from interpreter import main
 
 UNKNOWN_OPCODE = 1
+PROBE_VALUE = 42
+CONST_RESULT = 77
+LOAD_SOURCE = 55
+STORE_VALUE = 88
+COPIED_FIRST = 11
+COPIED_SECOND = 22
 
 INSTRUCTIONS = [
     {"a": 4, "b": 312, "c": 685},
@@ -61,10 +67,10 @@ class TestMemory:
 
     def test_write_read(self):
         memory = new_memory()
-        assert write_cell(memory, 5, 42) is None
+        assert write_cell(memory, 5, PROBE_VALUE) is None
         value, error = read_cell(memory, 5)
         assert error is None
-        assert value == 42
+        assert value == PROBE_VALUE
 
     def test_out_of_bounds(self):
         memory = new_memory()
@@ -79,25 +85,25 @@ class TestExecute:
 
     def test_const(self):
         memory = new_memory()
-        error = execute({"a": OPCODES["const"], "b": 10, "c": 77}, memory)
-        assert error is None
-        assert memory[10] == 77
+        instruction = {"a": OPCODES["const"], "b": 10, "c": CONST_RESULT}
+        assert execute(instruction, memory) is None
+        assert memory[10] == CONST_RESULT
 
     def test_load_indirect(self):
         memory = new_memory()
         memory[10] = 100
-        memory[100] = 55
-        error = execute({"a": OPCODES["load"], "b": 10, "c": 20}, memory)
-        assert error is None
-        assert memory[20] == 55
+        memory[100] = LOAD_SOURCE
+        instruction = {"a": OPCODES["load"], "b": 10, "c": 20}
+        assert execute(instruction, memory) is None
+        assert memory[20] == LOAD_SOURCE
 
     def test_store_indirect(self):
         memory = new_memory()
-        memory[30] = 88
+        memory[30] = STORE_VALUE
         memory[40] = 200
-        error = execute({"a": OPCODES["store"], "b": 30, "c": 40}, memory)
-        assert error is None
-        assert memory[200] == 88
+        instruction = {"a": OPCODES["store"], "b": 30, "c": 40}
+        assert execute(instruction, memory) is None
+        assert memory[200] == STORE_VALUE
 
     def test_unknown_handler(self):
         memory = new_memory()
@@ -110,9 +116,9 @@ class TestRunProgram:
     def test_copy_array(self):
         memory = new_memory()
         assert run_program(assemble(COPY_PROGRAM), memory) is None
-        assert memory[200] == 11
-        assert memory[201] == 22
-        assert memory[100] == 11
+        assert memory[200] == COPIED_FIRST
+        assert memory[201] == COPIED_SECOND
+        assert memory[100] == COPIED_FIRST
 
     def test_empty_code(self):
         assert run_program(b"", new_memory()) is None
